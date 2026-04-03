@@ -1,0 +1,20 @@
+﻿NurseScheduler.UI
+
+
+winexe
+C#
+.cs
+C:\Users\muham\Desktop\nurse schedule\NurseScheduler.UI\NurseScheduler.UI\obj\Debug\net10.0-windows\
+NurseScheduler.UI
+none
+false
+TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
+C:\Users\muham\Desktop\nurse schedule\NurseScheduler.UI\NurseScheduler.UI\App.xaml
+2-477419649
+
+101136678702
+2101713469781
+MainWindow.xaml;Views\Nurses\NurseListView.xaml;
+
+True
+
