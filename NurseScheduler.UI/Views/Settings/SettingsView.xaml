@@ -1,0 +1,77 @@
+<Page x:Class="NurseScheduler.UI.Views.Settings.SettingsView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Background="{StaticResource AppBackground}" Title="Ayarlar">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24" MaxWidth="680">
+            <TextBlock Text="⚙️  Ayarlar" Style="{StaticResource PageTitleStyle}"/>
+
+            <Border Background="#1A1A2E" CornerRadius="12" Padding="24" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="HASTANE BİLGİLERİ" FontSize="11" FontWeight="Bold" Foreground="#546E7A" Margin="0,0,0,16"/>
+                    <TextBox Foreground="White" CaretBrush="White" Text="{Binding HospitalName, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Hastane Adı" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,12"/>
+                    <TextBlock Text="Varsayılan Algoritma Modu:" Foreground="#78909C" Margin="0,0,0,8"/>
+                    <ComboBox Foreground="White" SelectedValue="{Binding DefaultMode}" Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="0,0,0,16">
+                        <ComboBoxItem Content="Hızlı (5-15 sn)" Tag="FAST"/>
+                        <ComboBoxItem Content="Dengeli (30-60 sn)" Tag="BALANCED"/>
+                        <ComboBoxItem Content="Kaliteli (2-5 dk)" Tag="QUALITY"/>
+                    </ComboBox>
+                    <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="#3D5AFE" Command="{Binding SaveCommand}"
+                            HorizontalAlignment="Left" Padding="20,10">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" >
+                                <materialDesign:PackIcon Kind="ContentSave" VerticalAlignment="Center"/>
+                                <TextBlock Text="Ayarları Kaydet" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <Border Background="#1A1A2E" CornerRadius="12" Padding="24" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="VERİTABANI" FontSize="11" FontWeight="Bold" Foreground="#546E7A" Margin="0,0,0,16"/>
+                    <TextBlock Foreground="#78909C" FontSize="12" Margin="0,0,0,4">
+                        <Run Text="Konum: "/>
+                        <Run Text="{Binding DbPath}" Foreground="#B0BEC5"/>
+                    </TextBlock>
+                    <TextBlock Foreground="#78909C" FontSize="12" Margin="0,0,0,16">
+                        <Run Text="Versiyon: "/>
+                        <Run Text="{Binding DbVersion}" Foreground="#00BCD4"/>
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" >
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}" Background="#1565C0" Command="{Binding BackupCommand}" Padding="16,10">
+                            <StackPanel Orientation="Horizontal" >
+                                <materialDesign:PackIcon Kind="DatabaseExport" VerticalAlignment="Center"/>
+                                <TextBlock Text="Yedek Al" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding RestoreCommand}" Padding="16,10">
+                            <StackPanel Orientation="Horizontal" >
+                                <materialDesign:PackIcon Kind="DatabaseImport" VerticalAlignment="Center"/>
+                                <TextBlock Text="Yedekten Yükle" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Background="#1A1A2E" CornerRadius="12" Padding="24">
+                <StackPanel>
+                    <TextBlock Text="HAKKINDA" FontSize="11" FontWeight="Bold" Foreground="#546E7A" Margin="0,0,0,16"/>
+                    <TextBlock Text="NurseScheduler Pro" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
+                    <TextBlock Text="v1.0.0 — Hemşire Vardiya Çizelgeleme Karar Destek Sistemi" Foreground="#78909C" FontSize="12" Margin="0,0,0,12"/>
+                    <Separator Background="#1E1E35" Margin="0,0,0,12"/>
+                    <TextBlock Text="Akademik Kaynaklar:" FontSize="12" FontWeight="Bold" Foreground="#546E7A" Margin="0,0,0,8"/>
+                    <TextBlock TextWrapping="Wrap" Foreground="#78909C" FontSize="11" LineHeight="20">
+                        1. Arslan ve Özcan (2022). Hemşire Çizelgeleme Problemi ve Bir Sağlık Kuruluşunda Uygulama. BAUN Fen Bil. Enst. Dergisi, 24(1), 335-348.&#x0a;
+                        2. Bayraktar ve Aytaç-Adalı (2022). Tam Sayılı Hedef Programlama Modeli ve Çocuk Acil Bölümünde Bir Uygulama. ÖHÜ İİBF Dergisi, 15(2), 246-260.&#x0a;
+                        3. Kaya (2022). Özel Kısıtlı Hemşire Çizelgeleme Probleminin Çözümü için Hedef Programlama Model Önerisi. UMAGD, 14(2), 895-906.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

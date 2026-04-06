@@ -1,0 +1,51 @@
+<Page x:Class="NurseScheduler.UI.Views.Schedule.CreateScheduleView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Background="{StaticResource AppBackground}" Title="Çizelge Oluştur">
+    <!-- Rest of the code for CreateScheduleView.xaml ... kept clean and correctly translated -->
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="✨ Çizelge Sihirbazı" Style="{StaticResource PageTitleStyle}"/>
+
+        <Border Grid.Row="1" Background="#1A1A2E" CornerRadius="14" Padding="32" MaxWidth="800" HorizontalAlignment="Left">
+            <StackPanel>
+                <TextBlock Text="1. ADIM: TEMEL BİLGİLER" FontSize="11" FontWeight="Bold" Foreground="#546E7A" Margin="0,0,0,16"/>
+                <TextBox Foreground="White" CaretBrush="White" Text="{Binding ScheduleName, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Çizelge Adı (Örn: 2026 Nisan Dönemi)" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,16"/>
+                <Grid Margin="0,0,0,24">
+                    <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="16"/><ColumnDefinition/></Grid.ColumnDefinitions>
+                    <DatePicker Grid.Column="0" SelectedDate="{Binding StartDate}" materialDesign:HintAssist.Hint="Başlangıç" Foreground="White" Background="Transparent"/>
+                    <DatePicker Grid.Column="2" SelectedDate="{Binding EndDate}" materialDesign:HintAssist.Hint="Bitiş" Foreground="White" Background="Transparent"/>
+                </Grid>
+
+                <TextBlock Text="2. ADIM: KAPSAM" FontSize="11" FontWeight="Bold" Foreground="#546E7A" Margin="0,0,0,16"/>
+                <TextBlock Text="Seçilen departmanlar için optimizasyon çalışacaktır:" Foreground="#B0BEC5" Margin="0,0,0,8"/>
+                <ListBox ItemsSource="{Binding SubUnits}" SelectionMode="Multiple" Foreground="White" BorderThickness="0" Background="Transparent" MaxHeight="150" Margin="0,0,0,24">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsIncluded}" Content="{Binding DisplayName}" Foreground="White"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <TextBlock Text="3. ADIM: MOTOR AYARLARI" FontSize="11" FontWeight="Bold" Foreground="#546E7A" Margin="0,0,0,16"/>
+                <ComboBox Foreground="White" SelectedValue="{Binding AlgorithmMode}" Style="{StaticResource MaterialDesignOutlinedComboBox}" materialDesign:HintAssist.Hint="Optimizasyon Modu" Margin="0,0,0,8">
+                    <ComboBoxItem Content="Hızlı (Sınırlı mutasyon, ~10sn)" Tag="FAST"/>
+                    <ComboBoxItem Content="Dengeli (Varsayılan)" Tag="BALANCED"/>
+                    <ComboBoxItem Content="Kaliteli (Çoklu popülasyon, ~3dk)" Tag="QUALITY"/>
+                </ComboBox>
+                
+                <Button Style="{StaticResource MaterialDesignRaisedButton}" Background="#3D5AFE" Height="48" Margin="0,32,0,0" Command="{Binding GenerateCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="RocketLaunch" Width="20" Height="20" VerticalAlignment="Center"/>
+                        <TextBlock Text="Optimizasyonu Başlat" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

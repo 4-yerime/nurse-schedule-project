@@ -1,0 +1,63 @@
+<Page x:Class="NurseScheduler.UI.Views.Schedule.ScheduleDisplayView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Background="{StaticResource AppBackground}" Title="Çizelge Görüntüle">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="📅 Hazırlanan Çizelgeler" Style="{StaticResource PageTitleStyle}"/>
+
+        <Border Grid.Row="1" Background="#1A1A2E" CornerRadius="12" Padding="20" Margin="0,0,0,16">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Seçili Çizelge:" Foreground="#B0BEC5" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                <ComboBox Foreground="White" ItemsSource="{Binding Schedules}" SelectedItem="{Binding SelectedSchedule}" DisplayMemberPath="Name" Style="{StaticResource MaterialDesignOutlinedComboBox}" Width="300" Margin="0,0,16,0"/>
+                <!-- Added Foreground=White to TextBoxes to fix missing text issue just in case -->
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="2" Background="#1A1A2E" CornerRadius="12" Padding="16">
+            <!-- Simplified DataGrid for drawing schedule matrix -->
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding NurseRows}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="#2D2D4E" BorderThickness="0,0,0,1" Padding="0,4">
+                                <StackPanel Orientation="Horizontal">
+                                    <!-- Nurse Info -->
+                                    <Border Width="150" Padding="8">
+                                        <TextBlock Text="{Binding NurseName}" Foreground="White" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                    </Border>
+                                    
+                                    <!-- Shifts Matrix -->
+                                    <ItemsControl ItemsSource="{Binding Cells}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Width="30" Height="30" Margin="2" CornerRadius="4" Background="{Binding BackgroundColor}" BorderBrush="{Binding BorderColor}" BorderThickness="1">
+                                                    <TextBlock Text="{Binding ShiftCode}" Foreground="Black" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                    
+                                    <!-- Summaries -->
+                                    <Border Width="100" Padding="8">
+                                        <TextBlock Text="{Binding TotalShifts, StringFormat='{}T:{0}'}" Foreground="#00BCD4" VerticalAlignment="Center" Margin="16,0,0,0"/>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</Page>

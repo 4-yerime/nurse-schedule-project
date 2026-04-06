@@ -1,27 +1,101 @@
-﻿<UserControl x:Class="NurseScheduler.UI.Views.Nurses.NurseListView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:viewModels="clr-namespace:NurseScheduler.UI.ViewModels"
-             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="500">
+<Page x:Class="NurseScheduler.UI.Views.Nurses.NurseListView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Background="{StaticResource AppBackground}" Title="Hemşire Listesi">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="👥  Hemşire Yönetimi" Style="{StaticResource PageTitleStyle}"/>
 
-    <UserControl.DataContext>
-        <viewModels:NurseListViewModel />
-    </UserControl.DataContext>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
 
-    <Grid Margin="10">
-        <DataGrid ItemsSource="{Binding Nurses}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
-                <DataGridTextColumn Header="Ad" Binding="{Binding FirstName}" Width="*"/>
-                <DataGridTextColumn Header="Soyad" Binding="{Binding LastName}" Width="*"/>
-                <DataGridCheckBoxColumn Header="Baş Hemşire" Binding="{Binding IsHeadNurse}" Width="100"/>
-                <DataGridTextColumn Header="Alt Birim ID" Binding="{Binding SubUnitId}" Width="100"/>
-                <DataGridTextColumn Header="Çalışma Tipi" Binding="{Binding EmploymentType}" Width="100"/>
-                <DataGridTextColumn Header="Max Aylık Saat" Binding="{Binding MaxMonthlyHours}" Width="120"/>
-                <DataGridTextColumn Header="Yıllık İzin" Binding="{Binding AnnualLeaveBalance}" Width="100"/>
-            </DataGrid.Columns>
-        </DataGrid>
+            <!-- LEFT SIDE: LIST -->
+            <Border Grid.Column="0" Background="#1A1A2E" CornerRadius="12" Padding="20">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,16">
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}" Background="#3D5AFE" Command="{Binding NewCommand}" Height="36" Margin="0,0,16,0">
+                            <StackPanel Orientation="Horizontal" >
+                                <materialDesign:PackIcon Kind="AccountPlus" VerticalAlignment="Center"/>
+                                <TextBlock Text="Yeni Hemşire" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <TextBox Foreground="White" CaretBrush="White" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Arama (İsim veya Birim)..." Style="{StaticResource MaterialDesignOutlinedTextBox}" Width="300" Margin="0,0,0,0"/>
+                    </StackPanel>
+                    
+                    <DataGrid ItemsSource="{Binding Nurses}" SelectedItem="{Binding Selected}" AutoGenerateColumns="False" CanUserAddRows="False" GridLinesVisibility="None" Background="Transparent" RowBackground="Transparent" AlternatingRowBackground="#1E1E35" HeadersVisibility="Column" ColumnHeaderStyle="{StaticResource MaterialDesignDataGridColumnHeader}" RowStyle="{StaticResource MaterialDesignDataGridRow}" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow">
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Ad Soyad" Binding="{Binding FullName}" Width="150" FontWeight="Bold"/>
+                            <DataGridTextColumn Header="Birim" Binding="{Binding UnitName}" Width="100"/>
+                            <DataGridTextColumn Header="Alt Birim" Binding="{Binding SubUnitName}" Width="120"/>
+                            <DataGridCheckBoxColumn Header="Baş Hem." Binding="{Binding IsHeadNurse}" Width="80"/>
+                            <DataGridTextColumn Header="Durum" Binding="{Binding IsActive}" Width="80"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <!-- RIGHT SIDE: EDIT -->
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
+                <Border Background="#1A1A2E" CornerRadius="12" Padding="20" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel>
+                        <TextBlock Text="HEMŞİRE BİLGİLERİ" FontSize="11" FontWeight="Bold" Foreground="#546E7A" Margin="0,0,0,16"/>
+                        
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="8"/><ColumnDefinition/></Grid.ColumnDefinitions>
+                            <TextBox Foreground="White" CaretBrush="White" Grid.Column="0" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Ad *" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                            <TextBox Foreground="White" CaretBrush="White" Grid.Column="2" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Soyad *" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                        </Grid>
+                        
+                        
+                        <!-- Units -->
+                        <ComboBox Foreground="White" ItemsSource="{Binding Units}" SelectedItem="{Binding SelectedUnit}" DisplayMemberPath="Name" materialDesign:HintAssist.Hint="Ana Birim *" Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="0,0,0,12"/>
+                        <ComboBox Foreground="White" ItemsSource="{Binding SubUnits}" SelectedItem="{Binding SelectedSubUnit}" DisplayMemberPath="Name" materialDesign:HintAssist.Hint="Alt Birim *" Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="0,0,0,12"/>
+                        
+                        <!-- Configs -->
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="8"/><ColumnDefinition/></Grid.ColumnDefinitions>
+                            <ComboBox Foreground="White" Grid.Column="0" SelectedValue="{Binding EmpType}" materialDesign:HintAssist.Hint="Sözleşme" Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                                <ComboBoxItem Content="FULL" Tag="FULL"/>
+                                <ComboBoxItem Content="PART" Tag="PART"/>
+                            </ComboBox>
+                            <TextBox Foreground="White" CaretBrush="White" Grid.Column="2" Text="{Binding MaxHours}" materialDesign:HintAssist.Hint="Aylık Max Saat" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                        </Grid>
+                        
+                        <TextBox Foreground="White" CaretBrush="White" Text="{Binding LeaveBalance}" materialDesign:HintAssist.Hint="Yıllık İzin Bakiyesi" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,12"/>
+                        
+                        <CheckBox Content="Baş Hemşire" IsChecked="{Binding IsHead}" Foreground="White" Margin="0,0,0,6"/>
+                        <CheckBox Content="Aktif" IsChecked="{Binding NurseActive}" Foreground="White" Margin="0,0,0,16"/>
+                        
+                        <!-- Tercihler -->
+                        <TextBlock Text="VARDİYA TERCİHLERİ" FontSize="11" FontWeight="Bold" Foreground="#546E7A" Margin="0,0,0,8"/>
+                        <ListBox ItemsSource="{Binding PreferredShifts}" DisplayMemberPath="Name" SelectionMode="Single" Background="Transparent" Foreground="White" BorderThickness="1" BorderBrush="#37474F" MinHeight="40" MaxHeight="100" Margin="0,0,0,16"/>
+
+                        <!-- Notlar -->
+                        <TextBox Foreground="White" CaretBrush="White" Text="{Binding Notes}" materialDesign:HintAssist.Hint="Notlar..." Style="{StaticResource MaterialDesignOutlinedTextBox}" AcceptsReturn="True" Height="60" Margin="0,0,0,20"/>
+                        
+                        <!-- Buttons -->
+                        <StackPanel Orientation="Horizontal" >
+                            <Button Content="Kaydet" Style="{StaticResource MaterialDesignRaisedButton}" Background="#00C853" Command="{Binding SaveCommand}"/>
+                            <Button Content="İptal" Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding CancelCommand}"/>
+                            <Button Content="Tamamen Sil" Style="{StaticResource MaterialDesignRaisedButton}" Background="#D32F2F" Command="{Binding DeleteCommand}" HorizontalAlignment="Right" Visibility="{Binding NurseSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+        </Grid>
     </Grid>
-</UserControl>
+</Page>

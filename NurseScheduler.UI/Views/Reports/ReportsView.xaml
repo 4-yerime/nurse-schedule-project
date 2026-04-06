@@ -1,0 +1,61 @@
+<Page x:Class="NurseScheduler.UI.Views.Reports.ReportsView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Background="{StaticResource AppBackground}" Title="Raporlar ve Excel">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="📑  Raporlar &amp; Excel Çıktısı" Style="{StaticResource PageTitleStyle}"/>
+
+        <Border Grid.Row="1" Background="#1A1A2E" CornerRadius="12" Padding="20" Margin="0,0,0,16">
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding RefreshCommand}" Margin="0,0,12,0">
+                    <StackPanel Orientation="Horizontal" >
+                        <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center"/>
+                        <TextBlock Text="Yenile" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding OpenExportsFolderCommand}">
+                    <StackPanel Orientation="Horizontal" >
+                        <materialDesign:PackIcon Kind="FolderOpen" VerticalAlignment="Center"/>
+                        <TextBlock Text="Rapor Klasörünü Aç" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="2" Background="#1A1A2E" CornerRadius="12" Padding="16">
+            <DataGrid ItemsSource="{Binding Schedules}" SelectedItem="{Binding Selected}" AutoGenerateColumns="False" CanUserAddRows="False" GridLinesVisibility="None" Background="Transparent" RowBackground="Transparent" AlternatingRowBackground="#1E1E35" HeadersVisibility="Column" ColumnHeaderStyle="{StaticResource MaterialDesignDataGridColumnHeader}" RowStyle="{StaticResource MaterialDesignDataGridRow}" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Tarih" Binding="{Binding CreatedAt, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" Width="130"/>
+                    <DataGridTextColumn Header="Çizelge Adı" Binding="{Binding Name}" Width="*"/>
+                    <DataGridTextColumn Header="Dönem" Binding="{Binding StartDate, StringFormat=\{0:dd.MM.yyyy\}}" Width="100"/>
+                    <DataGridTextColumn Header="Skor" Binding="{Binding FitnessScore, StringFormat=\{0:F1\}}" Width="70"/>
+                    <DataGridTextColumn Header="İhlal" Binding="{Binding TotalViolations}" Width="60"/>
+                    <DataGridTemplateColumn Header="İşlemler" Width="200">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Command="{Binding DataContext.ExportCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Style="{StaticResource MaterialDesignRaisedButton}" Background="#2E7D32" Margin="0,0,8,0" Height="28" Padding="10,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FileExcel" Width="14" Height="14" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Excel İndir" FontSize="11" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Command="{Binding DataContext.DeleteScheduleCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Style="{StaticResource MaterialDesignIconButton}" Foreground="#EF5350" Width="28" Height="28">
+                                        <materialDesign:PackIcon Kind="Delete"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</Page>

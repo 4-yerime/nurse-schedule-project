@@ -1,0 +1,143 @@
+<Page x:Class="NurseScheduler.UI.Views.Units.UnitsView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Background="{StaticResource AppBackground}" Title="Birim Yönetimi">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="🏥  Birim Yönetimi" Style="{StaticResource PageTitleStyle}"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Background="#1A1A2E" CornerRadius="12">
+                <DockPanel Margin="16">
+                    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                        <TextBlock Text="ANA BİRİMLER" FontSize="11" FontWeight="Bold" Foreground="#546E7A"/>
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}" Background="#3D5AFE" Margin="0,8,0,0" Command="{Binding NewUnitCommand}" Height="36" FontSize="12">
+                            <StackPanel Orientation="Horizontal" >
+                                <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center"/>
+                                <TextBlock Text="Yeni Birim" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <ListBox ItemsSource="{Binding Units}" SelectedItem="{Binding SelectedUnit}" Background="Transparent" BorderThickness="0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal"  Margin="4">
+                                    <Border Width="12" Height="12" CornerRadius="6" Background="{Binding ColorHex}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Name}" Foreground="White" FontSize="13" VerticalAlignment="Center"/>
+                                    <TextBlock Text="(Pasif)" Foreground="#EF5350" FontSize="11" VerticalAlignment="Center" Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" Padding="0,0,16,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="16"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="16"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="16"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#1A1A2E" CornerRadius="12" Padding="20" Visibility="{Binding IsEditingUnit, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <!-- Unit Edit Form -->
+                        <StackPanel>
+                            <TextBlock Text="BİRİM DÜZENLE" FontSize="11" FontWeight="Bold" Foreground="#546E7A" Margin="0,0,0,12"/>
+                            <TextBox Foreground="White" CaretBrush="White" Text="{Binding UnitName, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Birim Adı *" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,10"/>
+                            <TextBox Foreground="White" CaretBrush="White" Text="{Binding UnitDesc}" materialDesign:HintAssist.Hint="Açıklama" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,10"/>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <TextBlock Text="Renk Kodu:" Foreground="#78909C" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <ComboBox Foreground="White" SelectedValue="{Binding UnitColor}" SelectedValuePath="Tag" Grid.Column="1" Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                                    <ComboBoxItem Tag="#E53935">
+                                        <StackPanel Orientation="Horizontal"><Border Width="16" Height="16" Background="#E53935" CornerRadius="4" Margin="0,0,8,0"/><TextBlock Text="Kırmızı"/></StackPanel>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem Tag="#1E88E5">
+                                        <StackPanel Orientation="Horizontal"><Border Width="16" Height="16" Background="#1E88E5" CornerRadius="4" Margin="0,0,8,0"/><TextBlock Text="Mavi"/></StackPanel>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem Tag="#00897B">
+                                        <StackPanel Orientation="Horizontal"><Border Width="16" Height="16" Background="#00897B" CornerRadius="4" Margin="0,0,8,0"/><TextBlock Text="Koyu Yeşil"/></StackPanel>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem Tag="#43A047">
+                                        <StackPanel Orientation="Horizontal"><Border Width="16" Height="16" Background="#43A047" CornerRadius="4" Margin="0,0,8,0"/><TextBlock Text="Yeşil"/></StackPanel>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem Tag="#FB8C00">
+                                        <StackPanel Orientation="Horizontal"><Border Width="16" Height="16" Background="#FB8C00" CornerRadius="4" Margin="0,0,8,0"/><TextBlock Text="Turuncu"/></StackPanel>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem Tag="#8E24AA">
+                                        <StackPanel Orientation="Horizontal"><Border Width="16" Height="16" Background="#8E24AA" CornerRadius="4" Margin="0,0,8,0"/><TextBlock Text="Mor"/></StackPanel>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem Tag="#FDD835">
+                                        <StackPanel Orientation="Horizontal"><Border Width="16" Height="16" Background="#FDD835" CornerRadius="4" Margin="0,0,8,0"/><TextBlock Text="Sarı"/></StackPanel>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem Tag="#1A1A2E">
+                                        <StackPanel Orientation="Horizontal"><Border Width="16" Height="16" Background="#1A1A2E" CornerRadius="4" Margin="0,0,8,0"/><TextBlock Text="Siyah (İzin)"/></StackPanel>
+                                    </ComboBoxItem>
+                                </ComboBox>
+                            </Grid>
+                            <CheckBox Content="Aktif" IsChecked="{Binding UnitActive}" Margin="0,0,0,12" Foreground="White"/>
+                            <StackPanel Orientation="Horizontal" >
+                                <Button Content="Kaydet" Style="{StaticResource MaterialDesignRaisedButton}" Background="#00C853" Command="{Binding SaveUnitCommand}"/>
+                                <Button Content="İptal" Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding CancelUnitCommand}"/>
+                                <Button Content="Sil" Style="{StaticResource MaterialDesignRaisedButton}" Background="#EF5350" Command="{Binding DeleteUnitCommand}" HorizontalAlignment="Right"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" >
+                        <TextBlock Text="ALT BİRİMLER" FontSize="11" FontWeight="Bold" Foreground="#546E7A" VerticalAlignment="Center"/>
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}" Background="#3D5AFE" Command="{Binding NewSubUnitCommand}" Height="32" FontSize="12">
+                            <StackPanel Orientation="Horizontal" >
+                                <materialDesign:PackIcon Kind="Plus" Width="16" Height="16" VerticalAlignment="Center"/>
+                                <TextBlock Text="Alt Birim Ekle" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <Border Grid.Row="4" Background="#1A1A2E" CornerRadius="12" Padding="20" Visibility="{Binding IsEditingSubUnit, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <!-- SubUnit Edit Form -->
+                        <StackPanel>
+                            <TextBox Foreground="White" CaretBrush="White" Text="{Binding SubName, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Alt Birim Adı *" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,10"/>
+                            <TextBox Foreground="White" CaretBrush="White" Text="{Binding SubDesc}" materialDesign:HintAssist.Hint="Açıklama" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,10"/>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="16"/><ColumnDefinition/></Grid.ColumnDefinitions>
+                                <TextBox Foreground="White" CaretBrush="White" Grid.Column="0" Text="{Binding SubMin}" materialDesign:HintAssist.Hint="Min Hemşire/Vardiya" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                                <TextBox Foreground="White" CaretBrush="White" Grid.Column="2" Text="{Binding SubMax}" materialDesign:HintAssist.Hint="Max Hemşire/Vardiya" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                            </Grid>
+                            <CheckBox Content="Baş Hemşire Zorunlu" IsChecked="{Binding SubRequiresHead}" Foreground="White" Margin="0,0,0,6"/>
+                            <CheckBox Content="Aktif" IsChecked="{Binding SubActive}" Foreground="White" Margin="0,0,0,12"/>
+                            <StackPanel Orientation="Horizontal" >
+                                <Button Content="Kaydet" Style="{StaticResource MaterialDesignRaisedButton}" Background="#00C853" Command="{Binding SaveSubUnitCommand}"/>
+                                <Button Content="İptal" Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding CancelSubUnitCommand}"/>
+                                <Button Content="Sil" Style="{StaticResource MaterialDesignRaisedButton}" Background="#EF5350" Command="{Binding DeleteSubUnitCommand}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="6" Background="#1A1A2E" CornerRadius="12" Padding="16" MinHeight="150">
+                        <DataGrid ItemsSource="{Binding SubUnits}" SelectedItem="{Binding SelectedSubUnit}" AutoGenerateColumns="False" CanUserAddRows="False" GridLinesVisibility="None" Background="Transparent" RowBackground="Transparent" AlternatingRowBackground="#1E1E35" HeadersVisibility="Column" ColumnHeaderStyle="{StaticResource MaterialDesignDataGridColumnHeader}" RowStyle="{StaticResource MaterialDesignDataGridRow}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Alt Birim" Binding="{Binding Name}" Width="*"/>
+                                <DataGridTextColumn Header="Min" Binding="{Binding MinNursesPerShift}" Width="60"/>
+                                <DataGridTextColumn Header="Max" Binding="{Binding MaxNursesPerShift}" Width="60"/>
+                                <DataGridCheckBoxColumn Header="Baş Hem." Binding="{Binding RequiresHeadNurse}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Page>
